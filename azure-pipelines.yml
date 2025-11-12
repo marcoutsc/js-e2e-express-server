@@ -53,6 +53,6 @@ steps:
 
 - task: AzureWebApp@1
   inputs:
-    azureSubscription: '<nombre-de-tu-service-connection>'
-    appName: '<nombre-de-tu-app-service>'
+    azureSubscription: 'Connect'
+    appName: 'utscmaestro2960'
     package: '$(Build.ArtifactStagingDirectory)'
