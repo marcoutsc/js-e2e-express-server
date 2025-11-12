@@ -1,3 +1,4 @@
+
 # Node.js
 # Build a general Node.js project with npm.
 # Add steps that analyze code, save build artifacts, deploy, and more:
@@ -50,9 +51,9 @@ steps:
       targetPath: '$(Build.ArtifactStagingDirectory)'
     displayName: 'Publish pipeline artifact'
 
-
-- task: AzureWebApp@1
-  inputs:
-    azureSubscription: 'Connect'
-    appName: 'utscmaestro2960'
-    package: '$(Build.ArtifactStagingDirectory)'
+  # Deploy to Azure App Service
+  - task: AzureWebApp@1
+    inputs:
+      azureSubscription: 'Connect'
+      appName: 'utscmaestro2960'
+      package: '$(Build.ArtifactStagingDirectory)'
