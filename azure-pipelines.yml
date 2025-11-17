@@ -1,8 +1,5 @@
 
-# Node.js
-# Build a general Node.js project with npm.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+# Node.js CI/CD Pipeline for Azure App Service
 trigger:
   - main
 
@@ -13,47 +10,56 @@ variables:
   nodeVersion: '18.x'
 
 steps:
-  # Install Node.js
+  # 1. Instalar Node.js
   - task: UseNode@1
     inputs:
       version: $(nodeVersion)
-    displayName: 'Install Node.js'
+    displayName: 'Instalar Node.js'
 
-  # Install dependencies
+  # 2. Instalar dependencias
   - script: |
       npm install
-    displayName: 'Install dependencies'
+    displayName: 'Instalar dependencias'
 
-  # Build the project
+  # 3. Construir el proyecto (si aplica)
   - script: |
       npm run build
-    displayName: 'Build project'
+    displayName: 'Construir proyecto'
 
-  # Run tests
+  # 4. Ejecutar pruebas (opcional)
   - script: |
       npm test
-    displayName: 'Run tests'
+    displayName: 'Ejecutar pruebas'
 
-  # Copy project files to artifact staging directory
+  # 5. Copiar archivos al directorio de artefactos
   - task: CopyFiles@2
     inputs:
       sourceFolder: '$(Build.SourcesDirectory)'
       contents: |
-        src/**
-        public/**
+        **/*
       targetFolder: '$(Build.ArtifactStagingDirectory)'
-    displayName: 'Copy project files'
+    displayName: 'Copiar archivos del proyecto'
 
-  # Publish pipeline artifact
+  # 6. Comprimir archivos en ZIP para despliegue
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: '$(Build.ArtifactStagingDirectory)'
+      includeRootFolder: false
+      archiveType: 'zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/nodejs-app.zip'
+      replaceExistingArchive: true
+    displayName: 'Crear archivo ZIP del proyecto'
+
+  # 7. Publicar artefacto (opcional)
   - task: PublishPipelineArtifact@1
     inputs:
       artifactName: 'nodejs-app'
       targetPath: '$(Build.ArtifactStagingDirectory)'
-    displayName: 'Publish pipeline artifact'
+    displayName: 'Publicar artefacto'
 
-  # Deploy to Azure App Service
+  # 8. Desplegar en Azure App Service
   - task: AzureWebApp@1
     inputs:
       azureSubscription: 'connection2960'
       appName: 'utscmaestro2960'
-      package: '$(Build.ArtifactStagingDirectory)'
+      package: '$(Build.ArtifactStagingDirectory)/nodejs-app.zip'
