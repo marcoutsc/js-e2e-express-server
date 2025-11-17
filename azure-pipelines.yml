@@ -54,6 +54,6 @@ steps:
   # Deploy to Azure App Service
   - task: AzureWebApp@1
     inputs:
-      azureSubscription: 'NewProject2960'
+      azureSubscription: 'marcoutsc'
       appName: 'utscmaestro2960'
       package: '$(Build.ArtifactStagingDirectory)'
