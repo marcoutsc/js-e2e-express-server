@@ -60,6 +60,6 @@ steps:
   # 8. Desplegar en Azure App Service
   - task: AzureWebApp@1
     inputs:
-      azureSubscription: 'ProjectMark353092'
+      azureSubscription: 'connection2960'
       appName: 'utscmaestro2960'
       package: '$(Build.ArtifactStagingDirectory)/nodejs-app.zip'
